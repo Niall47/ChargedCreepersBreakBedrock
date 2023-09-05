@@ -1,0 +1,4 @@
+name: ChargedCreepersBreakBedrock
+version: '${project.version}'
+main: uk.deathtrap.chargedcreepersbreakbedrock.ChargedCreepersBreakBedrock
+api-version: '1.20'
