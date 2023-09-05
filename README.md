@@ -1,0 +1,1 @@
+/summon creeper ~ ~ ~ {powered:1}
