@@ -1,6 +1,7 @@
 package uk.deathtrap.chargedcreepersbreakbedrock;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Creeper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,17 +9,21 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class ChargedCreepersBreakBedrock extends JavaPlugin implements Listener {
 
+    private int maxBedrockBreak; // Declare maxBedrockBreak variable
     @Override
     public void onEnable() {
-        // Register the event listener
+        // Load the config or set defaults
+        saveDefaultConfig();
+        reloadConfig();
+        FileConfiguration config = getConfig();
+        maxBedrockBreak = config.getInt("max_bedrock_break", 10);
+        getLogger().info("Max Bedrock Break: " + maxBedrockBreak);
         getServer().getPluginManager().registerEvents(this, this);
-
-        // Plugin startup logic
-        getLogger().info("Enabling Charged Creepers Break Bedrock");
     }
 
     @Override
@@ -37,11 +42,21 @@ public final class ChargedCreepersBreakBedrock extends JavaPlugin implements Lis
                 Block creeperBlock = creeper.getLocation().getBlock();
                 List<Block> bedrockBlocks = getBedrock(creeperBlock);
 
-                bedrockBlocks.forEach(block -> {
+                int maxBedrockBreak = getConfig().getInt("max_bedrock_break", 30);
+
+                // Shuffle the list of bedrock blocks randomly
+                Collections.shuffle(bedrockBlocks);
+
+                // Remove bedrock blocks up to the configured limit
+                int blocksRemoved = 0;
+                for (Block block : bedrockBlocks) {
+                    if (blocksRemoved >= maxBedrockBreak) {
+                        break;
+                    }
+                    // Replace bedrock with fire
                     block.setType(Material.FIRE);
-                });
-                // TODO
-                // remove as many bedrock as the config allows
+                    blocksRemoved++;
+                }
             }
         }
     }

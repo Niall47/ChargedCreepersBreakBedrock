@@ -1,0 +1,5 @@
+name: ChargedCreepersBreakBedrock
+version: 1.0
+description: Allows charged creepers to break bedrock blocks.
+main: uk.deathtrap.chargedcreepersbreakbedrock.ChargedCreepersBreakBedrock
+authors: Niall47
